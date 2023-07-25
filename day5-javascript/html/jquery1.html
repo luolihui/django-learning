@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery</title>
+</head>
+
+<body>
+    <input type="text" id="user">
+    <input type="text" id="email">
+    <input type="button" value="提交" onclick="getinfo()">
+
+    <ul id="view">
+
+    </ul>
+
+    <script src="../static/jquery-3.6.4.min.js"></script>  
+    <script type="text/javascript">
+        function getinfo(){
+            var username=$('#user').val();
+            var email=$('#email').val();
+            var str=username+'-'+email;
+            var newTag=$('<li>').text(str);
+            $('#view').append(newTag);
+        }
+    </script>
+</body>
+</html>

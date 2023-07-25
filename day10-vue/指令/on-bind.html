@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-bind指令(单向绑定:JS->HTMl)</title>
+    <script src="../plugins/vue.js"></script>
+    <style>
+        .info{color: blueviolet;}
+        .danger{color: cadetblue;}
+        .ig {border: 2px solid red;}
+    </style>
+</head>
+<body>
+    <div id="app1">
+        <ul>
+            <li v-on:click="click">点击</li>
+            <li @dblclick="dothing('双击')">双击</li>
+            <li @mouseover="dothing('进入')" v-on:mouseout="dothing('离开')">进入&离开</li>
+        </ul>
+    </div>
+
+    <div id="app2">
+        <h3>跑马灯展示</h3>
+        <h4> {{ msg }} </h4>
+        <input type="button" value="开始" v-on:click="lang">
+        <input type="button" value="停滞" @click="stop">
+    </div>
+
+    <div id="app3">
+        <h3 v-bind:class="{info:v1,danger:v2}">{{ msg }}燃烧</h3>
+        <div style="margin-bottom: 10px;">
+            <input type="button" value="点击" v-on:click="clickme">
+        </div>
+        <h3 :style="[basestyle, overstyle]">等级加速度</h3>
+        <img alt="" v-bind:src="imageurl" v-bind:class="cls">
+    </div>
+
+    <script>
+        var app1 = new Vue({
+            el: "#app1",
+            data: {},
+            methods: {
+                click: function () {
+                    alert("点击了")
+                },
+                dothing: function (msg) {
+                    console.log(msg);
+                }
+            }
+        })
+
+        var vm = new Vue({
+            el: "#app2",
+            data: {
+                msg: "618再次开启vue学习之路",
+                intervalid: null,
+            },
+            methods: {
+                lang: function () {
+                    if (this.intervalid != null) return;
+
+                    this.intervalid = setInterval(() => {
+                        // 获取第一个字符
+                        var start = this.msg.substring(0, 1)
+                        // 获取后面所有字符
+                        var end = this.msg.substring(1)
+                        this.msg = end + start
+                    }, 400)
+                },
+                stop() {
+                    clearInterval(this.intervalid)
+                    this.intervalid = null
+                },
+            }
+        })
+
+        var app = new Vue({
+            el:"#app3",
+            data:{
+                imageurl:"https://bkimg.cdn.bcebos.com/pic/f2deb48f8c5494ee7997c64f22f5e0fe99257e2b?x-bce-process=image/watermark,image_d2F0ZXIvYmFpa2U4MA==,g_7,xp_5,yp_5",
+                cls:"ig",
+                v1:false,
+                v2:true,
+                msg:'疯狂加热i就',
+                basestyle:{ color: 'red', fontSize: '30px'},
+                overstyle:{ 'font-weight':'bold'}  // 带横线必须加引号
+            },
+            methods:{ // 在vm实例中，methods的方法获取data中数据必须加 this
+                clickme:function(){
+                    this.v1 = !this.v1;
+                    this.v2 = !this.v2;
+                }
+            }
+        })
+    </script>
+
+</body>
+</html>

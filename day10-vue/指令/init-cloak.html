@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue初体验</title>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2 v-cloak>欢迎学习 {{ msg }}，v-cloak能解决插值表达式闪烁问题</h2>
+        <p v-text="msg1">默认无闪烁</p>
+        <div v-html="msg2"></div>
+        <div>我叫{{ name }}，微信号是{{ wechat }}</div>
+        <input type="button" value="点击" v-on:click="clickMe">
+    </div>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="../plugins/vue.js"></script>
+    <script>
+        var vm = new Vue({  // vm对象为viewmodel调度者
+            el:"#app",
+            data:{  // data等价于M，存放el中需要的数据
+                msg:'Vue',
+                msg1:'v-text会覆盖元素原来内容',
+                msg2:'<h3>v-html可以解析html标签</h3>',
+                name:"琳琳",
+                wechat:"llh1234", // 不再需要手动操作DOM元素
+            },
+            methods:{
+                clickMe:function(){
+                    this.name = "alex";
+                    this.wechat = "chbcswd";
+                }
+            }
+        })
+    </script>
+</body>
+</html>

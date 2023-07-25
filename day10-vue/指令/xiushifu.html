@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件修饰符</title>
+    <script src="../plugins/vue.js"></script>
+    <style>
+        .inner{
+            height: 60px;
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="inner" @click="div1Handler">
+            <input type="button" value="默认冒泡" @click="btnHandler">
+        </div>
+
+        <p>首播</p>
+
+        <div class="inner" @click="div1Handler">
+            <input type="button" value="stop阻止冒泡" @click.stop="btnHandler">
+        </div>
+
+        <div style="margin-bottom:10px;margin-top:10px">
+            <a href="http://www.baidu.com" @click.prevent="linkclick">阻止默认行为：页面跳转</a>
+        </div>
+
+        <div class="inner" @click.capture="div1Handler">
+            <input type="button" value="capture捕获机制" @click="btnHandler">
+        </div>
+
+        <p>中国</p>
+
+        <div class="inner" @click.self="div1Handler">
+            <input type="button" value="self仅阻止自身冒泡，不影响其他" @click="btnHandler">
+        </div>
+    </div>
+
+    <script>
+        var em = new Vue({
+            el:'#app',
+            data:{},
+            methods:{
+                div1Handler(){
+                    console.log("触发了div")
+                },
+                btnHandler(){
+                    console.log("触发按钮事件")
+                },
+                linkclick(){
+                    console.log("阻止默认行为：页面跳转")
+                }
+            }
+        })
+    </script>
+</body>
+</html>

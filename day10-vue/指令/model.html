@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-model指令,双向绑定</title>
+    <script src="../plugins/vue.js"></script>
+    <style>
+        .outer{
+            margin: 0 auto;
+            width: 50%;
+            background-color: bisque;
+        }
+        .left{
+           text-align: left;
+        }
+        .margint{
+            margin-top: 100px;
+            margin-left: 150px;
+        }
+        .marginn{
+            margin-top: 10px;
+            margin-left: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app2">
+        <div class="outer">
+            <div class="left margint">
+                用户名：<input type="text" v-model="user">
+            </div>
+            <div v-bind:class="['left','marginn']">
+                密码：<input type="password" v-model="pwd">
+            </div>
+            <div v-bind:class="classobj">
+                性别：
+                <input type="radio" v-model="sex" value="1">男
+                <input type="radio" v-model="sex" value="2">女
+            </div>
+            <div v-bind:class="classobj">
+                爱好：
+                <input type="checkbox" v-model="hobby" value="11">篮球
+                <input type="checkbox" v-model="hobby" value="22">足球
+                <input type="checkbox" v-model="hobby" value="33">乒乓球
+            </div>
+            <div v-bind:class="classobj">
+                居住地:
+                <select v-model="city">
+                    <option value="sh">上海</option>
+                    <option value="cs">长沙</option>
+                    <option value="gz">广州</option>
+                </select>
+            </div>
+            <div v-bind:class="classobj">
+                其他：<textarea v-model="more"></textarea>
+            </div>
+
+            <div style="text-align: center;margin-top: 10px;">
+                <input type="button" value="注册" v-on:click="clickme" />
+                <input type="button" value="重置" v-on:click="reset" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el:"#app2", 
+            data:{
+                user:"",
+                pwd:"",
+                sex:"",
+                hobby:["22"],
+                city:"cs",
+                more:"v-model只能用于表单元素：input、checkbox、select中",
+                classobj:{marginn:true,center:false, left:true, margint:false},
+            },
+            methods:{
+                clickme:function(){
+                    console.log(this.user,this.pwd,this.sex,this.hobby,this.city,this.more);
+                },
+                reset:function(){
+                    this.user = "";
+                    this.pwd = "";
+                    this.sex = "";
+                    this.hobby = [];
+                    this.city = "";
+                    this.more = "";
+                },
+            }
+        })
+    </script>
+</body>
+</html>

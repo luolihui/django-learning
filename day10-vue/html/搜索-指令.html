@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>案例：数据管理</title>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.4.1/css/bootstrap.css">
+    <script src="../plugins/vue.js"></script>
+    <style>
+        .bs-example {
+            margin-top: 10px;
+            margin-right: 20px;
+            margin-left: 20px;
+        }
+
+        .form-control {
+            width: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app5">
+        <div class="bs-example" data-example-id="simple-horizontal-form">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">姓名</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" v-model="user" placeholder="姓名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">年龄</label>
+                    <div class="col-sm-10">
+                        <input type="text" v-model="age" @keyup.up="adduser" placeholder="年龄" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="button" v-on:click="adduser" v-bind:value="title" class="btn btn-default">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">搜索</label>
+                    <div class="col-sm-10">
+                        <input type="text" v-model="keywords" v-focus v-color="'blue'" class="form-control" placeholder="请输入关键字">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="bs-example" data-example-id="bordered-table">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>年龄</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,idx) in search(keywords)">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.age }}</td>
+                        <td>
+                            <input type="button" value="编辑" v-on:click="editRow(idx)">
+                            <input type="button" value="删除" v-on:click="deleteRow(idx)">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 自定义全局按键修饰符
+        Vue.config.keyCodes.up = 38  // 在Vue中查询键值修饰符
+
+        // 自定义全局指令，定义时不需要加 v- 前缀，使用时必须加
+        Vue.directive('focus',{  // 在每个函数中，第一个参数永远是 el
+            inserted:function(el){   // 元素插入到 DOM 中时，执行 inserted 函数（一次）
+                el.focus()   // 和 JS 行为相关的操作，一般在 inserted 中执行
+            },
+            updated:function(el){  // 当 VNode 更新时，执行 updated 函数（可能多次）
+
+            },
+        })
+
+        Vue.directive('color',{
+            bind:function(el,binding){  // 样式相关操作，一般在 bind 中执行
+                el.style.color = binding.value
+            }
+        })
+
+        var app = new Vue({
+            el: "#app5",
+            data: {
+                editIndex: undefined,
+                title: "添加",
+                user: "",
+                age: "",
+                keywords: "",
+                datalist: [
+                    { name: "李艾", age: 23 },
+                ]
+            },
+            methods: {
+                adduser: function () {
+                    if (this.editIndex) {
+                        // 修改
+                        this.datalist[this.editIndex].name = this.user;
+                        this.datalist[this.editIndex].age = this.age;
+                    } else {
+                        //添加
+                        let row = { name: this.user, age: this.age };
+                        this.datalist.push(row);
+                    }
+                    this.user = '';
+                    this.age = '';
+                    this.editIndex = undefined;
+                    this.title = "添加";
+                },
+                deleteRow: function (idx) {
+                    this.datalist.splice(idx, 1);  // 删除指定位置元素
+                    // 移除数组的第三个元素，并在数组第三个位置添加新元素:
+                    // var fruits = ["Banana", "Orange", "Apple", "Mango"];
+                    // fruits.splice(2, 1, "Lemon", "Kiwi");
+                    // 结果：fruits = ['Banana','Orange','Lemon','Kiwi','Mango']
+                },
+                editRow: function (idx) {
+                    let { name, age } = this.datalist[idx];
+                    this.user = name;
+                    this.age = age;
+                    this.title = '修改';
+                    this.editIndex = idx;
+                },
+                search(keywords){
+                    var newlist = []
+                    this.datalist.forEach( item => {
+                        if(item.name.indexOf(keywords) != -1){
+                            newlist.push(item)
+                        }
+                    })
+                    return newlist
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

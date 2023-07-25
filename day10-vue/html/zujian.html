@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件</title>
+    <script src="../plugins/vue.js"></script>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.4.1/css/bootstrap.css">
+    <style>
+        body{
+            width: 80%;
+            margin-left: 20px;
+        }
+        .quanju{
+            color: transparent;
+            -webkit-text-stroke: 1px #04D939;
+        }
+        .jubu{
+            color: transparent;
+            -webkit-text-stroke: 1px blueviolet;
+        }
+        .v-enter, .v-leave-to{
+            opacity: 0;
+            transform: translateX(150px);
+        }
+        .v-enter-active, .v-leave-active{
+            transition: all 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h3 class="quanju">全局组件</h3>
+        <a href="" @click.prevent=" comName='Quan' ">quan</a>
+        <a href="" @click.prevent=" comName='Tab' ">tab</a>
+        <transition mode="out-in">
+            <component :is="comName"></component>
+        </transition>
+        <p>{{ name }}</p>
+        <my-eom></my-eom>
+
+        <ghv v-bind:parenttran="componenttran"></ghv>
+        <ggv v-on:funcc="show"></ggv>
+    </div>
+
+    <template id="tmp2">
+        <div>
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>标题</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in datalist">
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.title }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
+
+    <template id="tem3">
+        <div>
+            <h4>子组件调用父组件的方法</h4>
+            <input type="button" value="触发funcc方法" @click="myclick">
+        </div>
+    </template>
+
+    <div id="app1">
+        <h3 class="jubu">局部组件</h3>
+        <a href="" @click.prevent=" comName2='Ju' ">ju</a>
+        <a href="" @click.prevent=" comName2='Bb' ">bb</a>
+        <component :is="comName2"></component>
+        <p>{{ name }}</p>
+    </div>
+    
+    <script>
+        // 创建全局组件（3种方式），不需要挂载
+        // 组件的 template 属性指向的模板内容必须有且仅有一个根元素（简单粗暴：用 div 包起来）
+        Vue.component('Quan',{
+            // 组件中的 data 是一个方法，并有返回值（和 Vue 对象创建不同）
+            data: function () {
+                return {
+                    msg: "哈哈哈哈",
+                    count: 0,
+                }
+            },
+            template: 
+            `   <div>
+                    <h4>{{ msg }}</h4>
+                    <input type="text" v-model="msg">
+                    <input type="button" v-on:click="showmsg" value="提示"> <br>
+                    <input type="button" v-on:click="increment" value="+1" style="margin-top:10px">
+                    <h4> {{ count }}</h4>
+                </div>
+            `,
+            methods: {
+                showmsg: function () {
+                    alert(this.msg)
+                },
+                increment:function() {
+                    this.count++
+                },
+            }
+        });
+
+        var eom = Vue.extend({
+            template:'<h4>使用 Vue.extend 创建的组件</h4>'
+        })
+        Vue.component('myEom',eom)
+
+        Vue.component('Tab', {
+                data: function () {
+                    return {
+                        datalist: [
+                            { id: 1, title: "分分分" },
+                            { id: 2, title: "风风风" },
+                        ]
+                    }
+                },
+                template: "#tmp2",
+            });
+
+        var ggv = {
+            template: '#tem3',
+            data(){
+                return {
+                    sonmsg: { name: '儿子', age: 6}
+                }
+            },
+            methods: {
+                myclick(){
+                    this.$emit('funcc', this.sonmsg)
+                },
+            },
+        }
+
+        var app = new Vue({
+            el: "#app",
+            data: { 
+                name: "驼峰命名不能直接使用: myEom 改为 my-eom",
+                comName: 'Quan',
+                componenttran: "父组件数据",
+                dataFromSon: null,
+            },
+            methods: {
+                show(hsj){
+                    console.log(hsj)
+                    // alert('调用了父组件的show方法' + hsj)
+                    // this.dataFromSon = hsj  // 子组件向父组件传递数据
+                },
+            },
+            components: {
+                ghv: {
+                // 使用 v-bind:parenttran="componenttran" 将父组件数据传递给子组件，
+                // 传递过来的 parenttran 属性在 props 数组定义后，子组件才可使用
+                // 最好不要修改 props 中的数据（虽然可以）
+                    template: "<h4> 子组件调用父组件数据 ---- {{ parenttran }}</h4>",
+                    props: ['parenttran'],
+                },
+                ggv,
+            },
+        })
+
+        // 创建局部组件，需要挂载在vue对象上
+        const Ju = {
+            data: function () {
+                return {
+                    msg: "咿呀咿呀呦",
+                }
+            },
+            template:
+                `<div>
+                    <h4>{{ msg }}</h4>
+                    <input type="text" v-model="msg">
+                    <input type="button" v-on:click="showmsg" value="点击">
+                </div>`,
+            methods: {
+                showmsg: function () {
+                    alert(this.msg)
+                }
+            }
+        }
+
+        const Biri = {
+            data: function () {
+                return {
+                    list: [
+                        { id: 1, name: '五菱宏光', ctime: new Date() },
+                        { id: 2, name: '法拉利', ctime: new Date() }
+                    ],
+                }
+            },
+            template:
+            `<div>
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>ctime</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for='item in list' :key='item.id'>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.ctime }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>`,
+        }
+
+        var app = new Vue({
+            el: "#app1",
+            data: { 
+                name: "李艾儿",
+                comName2: 'Ju',
+            },
+            components: {
+                Bb: Biri,
+                Ju
+            },
+            methods: {}
+        })
+    </script>
+</body>
+</html>

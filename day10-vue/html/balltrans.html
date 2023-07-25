@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../plugins/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+    <style>
+        .ball{    /* 小球样式设置 */
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="rgd">
+        <input type="button" value="小球半场动画" @click='flag4=!flag4'>
+        <transition @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+            <div class="ball" v-show="flag4"></div>
+        </transition>
+    </div>
+
+    <div id="databinding">
+        <button v-on:click="show = !show">点我</button>
+        <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:leave="leave" v-bind:css="false">
+            <p v-if="show">菜鸟教程 -- 学的不仅是技术，更是梦想！！！</p>
+        </transition>
+    </div>
+
+    <script>
+        var ga = new Vue({
+            el: '#rgd',
+            data: {
+                flag4: false,
+            },
+            methods: {
+                beforeEnter(el) {  //el 可以认为是通过 document.getElementById('') 获得的原生JS DOM对象
+                    el.style.transform = "translate(0,0)"
+                },
+                enter(el, done) {
+                    el.offsetWidth
+                    el.style.transform = "translate(150px,350px)"
+                    el.style.transition = 'all 1s ease'
+                    done()  // done 就是 afterEnter 函数的引用
+                },
+                afterEnter(el) {
+                    this.flag4 = !this.flag4  // 隐藏小球，并直接跳过后半场动画，再次开始时为初始状态
+                },
+            },
+        })
+
+        var em = new Vue({
+                el: '#databinding',
+                data: {
+                    show: false
+                },
+                methods: {
+                    beforeEnter: function (el) {
+                        el.style.opacity = 0
+                        el.style.transformOrigin = 'left'
+                    },
+                    enter: function (el, done) {
+                        Velocity(el, { opacity: 1, fontSize: '1.4em' }, { duration: 300 })
+                        Velocity(el, { fontSize: '1em' }, { complete: done })
+                    },
+                    leave: function (el, done) {
+                        Velocity(el, { translateX: '15px', rotateZ: '50deg' }, { duration: 600 })
+                        Velocity(el, { rotateZ: '100deg' }, { loop: 2 })
+                        Velocity(el, {
+                            rotateZ: '45deg',
+                            translateY: '30px',
+                            translateX: '30px',
+                            opacity: 0
+                        }, { complete: done })
+                    }
+                }
+            })
+
+    </script>
+</body>
+</html>

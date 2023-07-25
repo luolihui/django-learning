@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评论案例</title>
+    <script src="../plugins/vue.js"></script>
+    <link rel="stylesheet" href="../plugins/bootstrap-3.4.1/css/bootstrap.css">
+    <style>
+        body{
+            width: 80%;
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="star">
+        <com @fun="loadComments"></com>
+
+        <ul class="list-group">
+            <li v-for="item in list" :key="item.id" class="list-group-item">
+                <span class="badge">评论人：{{ item.user }}</span>
+                {{ item.content }}
+            </li>
+        </ul>
+    </div>
+
+    <template id="tem2">
+        <div>
+            <div class="form-group">
+                <label>评论人：</label>
+                <input v-model="user" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>评论内容：</label>
+                <textarea v-model="content" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="button" @click="postComment" value="发表" class="btn btn-primary">
+            </div>
+        </div>
+    </template>
+
+    <script>
+        var comment = {
+            data(){
+                return {
+                    user: '',
+                    content: '',
+                }
+            },
+            template: '#tem2',
+            methods: {
+                postComment(){  //  数据保存在 应用程序的 本地存储 中
+                    var comm = { id: Date.now(), user: this.user, content: this.content }
+                    // 从 localStorage 中获取所有评论
+                    var list = JSON.parse(localStorage.getItem('cmts') || '[]')
+                    list.unshift(comm)
+                    // 重新保存最新的 评论数据
+                    localStorage.setItem('cmts', JSON.stringify(list))
+                    this.user = this.content = ''
+                    // 通过 v-on 实现子组件调用父组件方法
+                    this.$emit('fun')
+                },
+            },
+        }
+
+        var km = new Vue({
+            el:'#star',
+            data: {
+                list: [
+                    {id: Date.now(), user: '李白', content: '天生我材必有用'},
+                    {id: Date.now(), user: '杜甫', content: '感时花溅泪'},
+                ],
+            },
+            created(){
+                this.loadComments()
+            },
+            methods: {
+                loadComments(){ // 从本地的 localStorage 中加载评论列表
+                    var list = JSON.parse(localStorage.getItem('cmts') || '[]')
+                    this.list = list
+                },
+            },
+            components:{
+                com: comment,
+            }
+        })
+    </script>
+</body>
+</html>

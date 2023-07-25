@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动画</title>
+    <script src="../plugins/vue.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
+    <style>
+        .v-enter, .v-leave-to{  /* 全场通用动画效果 */
+            opacity: 0;
+            transform: translateX(250px);
+        }
+        .v-enter-active, .v-leave-active{
+            transition: all 1s ease;
+        }
+        .my-enter, .my-leave-to{   /* 自定义命名动画效果 */
+            opacity: 0;
+            transform: translateY(150px);
+        }
+        .my-enter-active, .my-leave-active{
+            transition: all 1s ease;
+        }
+        .your-enter, .your-leave-to{   /* 列表动画设置 */
+            opacity: 0;
+            transform: translateY(150px);
+        }
+        .your-enter-active, .your-leave-active{
+            transition: all 1s ease;
+        }
+        li{
+            border:1px dashed #999;
+            margin: 5px;
+            line-height: 35px;
+            padding-left: 5px;
+            font-size: 15px;
+            width: 100%;
+        }
+        li:hover{
+            background-color: pink;
+            transition: all 0.8s ease;
+        }
+        .your-move{
+            transition: all 0.6s ease;
+        }
+        .your-leave-active{
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="tran">
+        <input type="button" value="左右" @click="flag=!flag">
+        <transition>
+            <h4 v-if="flag">和的风格和大风</h4>
+        </transition> <hr>
+        
+        <input type="button" value="上下" @click="flag2=!flag2">
+        <transition name="my">
+            <h4 v-if="flag2">自定义动画指令</h4>
+        </transition> <hr>
+        
+        <input type="button" value="animate" @click="flag3=!flag3">
+        <transition enter-active-class="bounceIn" leave-active-class="bounceOut"
+        :duration="{ enter:200,leave:400 }">
+            <h4 v-if="flag3" class="animated">使用animate.css的动画</h4>
+        </transition> <hr>
+    </div> 
+
+    <div id="emm">
+        <div>
+            <label>ID:<input type="text" v-model="id"></label>
+            <label>name:<input type="text" v-model="name"></label>
+            <input type="button" value="动画添加" @click="add">
+        </div>
+        <!-- 如果要为 v-for 循环创建的元素设置动画，必须设置 :key 属性
+        实现列表过渡时，如果过渡元素是通过 v-for 循环渲染出来的，要使用 transition-group
+        添加 appear 属性，实现页面展示时的入场效果
+        设置 tag 属性，指定渲染元素，不设置则默认为 span 标签-->
+        <transition-group name="your" appear tag="ul">
+            <li v-for="(item,idx) in datalist" :key="item.id" @click="del(idx)">
+                {{ item.id }} -- {{ item.name }}</li>
+        </transition-group>
+    </div>
+    
+    <script>
+        var wm = new Vue({
+            el:"#tran",
+            data:{
+                flag:false,
+                flag2:false,
+                flag3:false,
+            },
+            methods:{},
+        })
+        
+        var qw = new Vue({
+            el:"#emm",
+            data:{
+                datalist: [
+                    { id: 1, name: "赵高" },
+                    { id: 2, name: "魏忠贤" },
+                    { id: 3, name: "严嵩" },
+                ],
+            },
+            methods:{
+                add(){
+                    this.datalist.push( { id:this.id, name:this.name } )
+                    this.id = this.name = ''
+                },
+                del(idx){
+                    this.datalist.splice(idx,1)
+                },
+            },
+        })
+    </script>
+</body>
+</html>

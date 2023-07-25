@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>跑马灯</title>
+</head>
+
+<body>
+    
+     <span id="txt">欢迎韩国明星韩素喜驾临华南师范大学
+     </span>
+
+     <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>姓名</th>
+                <th>年龄</th>
+            </tr>
+        </thead>
+        <tbody id="body">
+    
+        </tbody>
+     </table>
+
+    <script type="text/javascript">
+        function show(){
+            var tag=document.getElementById('txt'); //获取HTMl某标签的内容
+            var data=tag.innerText;
+
+            var first=data[0];
+            var other=data.substring(1,data.length);
+            var newtext=other+first;
+
+            tag.innerText=newtext;
+        } 
+        setInterval(show,1000) //js定时器
+
+        //动态创建表格
+        var infolist=[
+        {id:1,name:'李登辉',age:23},
+        {id:2,name:'金凤凰',age:24},
+        {id:3,name:'孔圣人',age:2000},
+        {id:4,name:'刘青云',age:53}
+        ];
+        for(var idx in infolist){
+            var info=infolist[idx];
+            var tr=document.createElement('tr');
+            for(var key in info){
+                var text=info[key];
+                var td=document.createElement('td');
+                td.innerText=text;
+                tr.appendChild(td);
+            }
+            var bodytag=document.getElementById('body');
+            bodytag.appendChild(tr);
+        }
+    </script>
+
+</body>
+</html>

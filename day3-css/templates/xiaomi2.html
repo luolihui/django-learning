@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>二级菜单</title>
+    <!--行内标签默认设置高度、边距无效；
+        去除超链接下划线： text-decoration: none; 
+        文本垂直居中通过设置 line-height:块高度;
+        图片垂直居中只能通过计算边距进行设置
+        .container:after相当于class='clear:both'
+    -->
+    <style>
+        body{
+            margin: 0;
+        }
+        .container{
+            width: 800px;
+            margin: 0 auto;
+        }
+        .container:after{
+            content: '';
+            display: block;
+            clear: both;
+        }
+        .sub-header{
+            height: 100px;
+            background-color: aliceblue;
+        }
+        .sub-header .ht{
+            height: 100px;
+        }
+        .sub-header .logo{
+            width: 234px;
+            float: left;
+        }
+        .sub-header .logo a{
+            display: inline-block; 
+            margin-top: 22px;
+        }
+        .sub-header .logo a img{
+            height: 56px;
+            width: 56px;
+        }
+        .sub-header .menu-list{
+            float: left;
+            line-height: 100px;
+        }
+        .sub-header .menu-list a{
+            display: inline-block;
+            padding: 0 10px;
+            color: #333;
+            font-size:16px;
+            text-decoration: none;
+        }
+        .sub-header .menu-list a:hover{
+            color: #ff6700;
+        }
+        .sub-header .search{
+            float: right;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="sub-header">
+        <div class="container">
+            <div class="ht logo">
+                <a href="https://www.mi.com/">
+                    <img src="../images/logo-mi2.png"  alt="">
+                </a>
+            </div>
+            <div class="ht menu-list">
+                <a href="https://www.mi.com/">小米手机</a>
+                <a href="https://www.mi.com/">红米</a>
+                <a href="https://www.mi.com/">电视</a>
+                <a href="https://www.mi.com/">笔记本</a>
+                <a href="https://www.mi.com/">平板</a>
+            </div>
+            <div class="ht search">3</div>
+        </div>
+    </div>
+</body>
+
+</html>

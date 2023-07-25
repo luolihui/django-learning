@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue-router组件</title>
+    <style>
+        body{
+            margin: 0;
+        }
+        .container{
+            width: 80%;
+            margin: 0 auto;
+        }
+        .menu{
+            height: 48px;
+            background-color: #499ef3;
+            line-height: 48px;
+        }
+        .menu a{
+            color: white;
+            text-decoration: none;
+            padding: 0 10px;
+        }
+        .course-list{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        .course-list .item{
+            width: 248px;
+            padding: 10px;
+            border: 1px solid #dddddd;
+        }
+        .course-list .item img{
+            width: 240px;
+            height: 100px;
+        }
+        .router-link-active, .myactive {  /* 为正在访问的链接设置样式 */
+            font-size: 30px;
+            background-color: blueviolet;
+        }
+        .v-enter, .v-leave-to{  /* 设置动画效果 */
+            opacity: 0;
+            transform: translateX(150px);
+        }
+        .v-enter-active, .v-leave-active{
+            transition: all 0.6s ease;
+        }
+    </style>
+    <!--如果报错：Uncaught TypeError: VueRouter is not a constructor，
+        可能是因为 vue-router 版本过高 -->
+    <script src="../plugins/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <a href="https://baike.baidu.com/item/%E6%9D%8E%E8%89%BE%E5%84%BF/1865977?fr=aladdin">
+                {{ name }}
+            </a>
+        </div>
+        <router-view></router-view>
+
+    </div>
+
+    <script>
+        // 组件的模板对象
+        const Home = {
+            data:function(){
+                return { name: "姜恩惠" }
+            },
+            template:
+            `<div>
+                <div class="menu">
+                    <div class= "container" >
+                        <router-link to="/home">路飞学城</router-link>
+                        <router-link :to="'main'">主页</router-link>
+                        <router-link to="/course">课程</router-link>
+                        <router-link :to="{ path: 'news' }">资讯</router-link>
+                        <router-link to="/pins">沸点</router-link>
+                        <div style="float:right;">
+                            <router-link to='/login'>登录</router-link>
+                        </div>
+                    </div>
+                </div >
+                <div class="container">
+                    <a href="https://baike.baidu.com/item/%E5%A7%9C%E6%81%A9%E6%83%A0/3824702">
+                         {{ name }}
+                    </a>
+                    <transition mode="out-in">
+                        <router-view></router-view>
+                    </transition>
+                </div>
+            </div>`
+        }
+
+        const Zhuye = {
+            data: function () {
+                return { title2: '主页内容' }
+            },
+            template: '<h3>{{ title2 }}</h3>'
+        }
+
+        const Course = {
+            data:function(){
+                return {
+                    courseList:[]
+                }
+            },
+            created:function(){
+                axios({
+                    method:"get",
+                    url:'https://api.luffycity.com/api/v1/course/actual/?limit=5&offset=0',
+                    headers:{
+                        "Content-Type":"application/json"
+                    }
+                }).then((res) => {
+                    this.courseList = res.data.data.result;
+                })
+            },
+            mounted: function () {
+            },
+            template:
+            `<div class="course-list">
+                <div class="item" v-for="item in courseList">
+                    <router-link :to = "{name:'Detail', params:{id:item.id}}">
+                        <img v-bind:src="'https:'+ item.cover" alt="">
+                        <a>{{ item.name }}</a>
+                    <router-link>
+                </div>
+            </div>
+            `
+        }
+
+        const News = {                 
+            data: function () {
+                return {
+                    newList: []
+                }
+            },
+            created: function () {
+                axios({
+                    method: "get",
+                    url: 'https://api.luffycity.com/api/v1/course/actual/?limit=5&offset=10',
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }).then((res) => {
+                    this.newList = res.data.data.result;
+                })
+            },
+            template:`<ul><li v-for="item in newList">{{ item.name }}</li></ul>`
+        }
+
+        const Detail = {
+            data:function(){
+                return{
+                    title:"详细页面",
+                    courseID:null,
+                    hotcourselist:[
+                        {id:1000,title:"python开发"},
+                        {id:2000,title:'软件测试师考试'},
+                    ],
+                }
+            },
+            created:function(){
+                this.courseID = this.$route.params.id;  // 路由传参方式
+                // 发送Ajax请求获取课程详细信息
+                this.getCoursedetail();
+            },
+            watch:{
+                $route:function(to, from){
+                    this.courseID = to.params.id;
+                    // 发送Ajax请求获取课程详细信息
+                    this.getCoursedetail();
+                }
+            },
+            methods:{
+                getCoursedetail:function(){
+                    // 根据 this.courseID 获取课程详细信息
+                }
+            },
+            template: 
+                `<div>
+                    <h3>课程详细页面</h3>
+                    <div>
+                        当前课程ID为: {{ courseID }}
+                    </div>
+                    <ul>
+                        <li v-for='item in hotcourselist'>
+                            <router-link :to="{name:'Detail',params:{id:item.id}}">
+                            {{ item.title }}</router-link>
+                        </li>
+                    </ul>
+                </div>
+                `
+        }
+
+        const Pins = {
+            data:function(){
+                return {}
+            },
+            template:
+            `<div>
+                <h3>沸点专区</h3>
+                <router-link :to="{name:'Hot'}">热点</router-link>
+                <router-link :to="{name:'Following'}">关注</router-link>
+                <router-view></router-view>
+            </div>
+            `
+        }
+
+        const Hot = {template: `<div><h3>Hot页面</h3></div>`}
+
+        const Following = { template: `<div><h3>Following页面</h3></div>` }
+
+        const Login = {
+            data:function(){
+                return{
+                    user:'',
+                    pwd:''
+                }
+            },
+            methods: {
+                dologin:function(){
+                    if(this.user.length > 0 && this.pwd.length > 0){
+                        sessionStorage.setItem("isLogin", true);
+                        this.$router.push({name:'Home'}); // 登录成功后进入 Home 页面
+                    }
+                }
+            },
+            template:
+            `<div style="width: 500px;margin: 100px auto; background-color: aquamarine;">
+                <p style="text-align: center;"><input type="text" placeholder="用户名" v-model="user"></p>
+                <p style="text-align: center;"><input type="text" placeholder="密码" v-model="pwd"></p>
+                <p style="text-align: center;"><input type="button" value="登录" @click="dologin"></p>
+           </div>`
+        }
+
+        //  导入 vue-router 后，在 Windows 全局对象中就有了一个路由构造函数 VueRouter
+        //  在 new 路由对象时，可以为构造函数传递一个配置对象 
+        const routerObj = new VueRouter({
+            routes:[  // 路由匹配规则
+            // 每个路由规则都是一个对象，对象身上必须有两个属性：path 和 component
+            // path 表示路由链接地址，component 表示对应组件
+            // 注：component 的属性值必须是组件的模板对象，不能是组件的引用名称
+                {path: '/', redirect: '/login'}, // 首先进入 login 页面
+                {path: '/login', component: Login, name: 'Login' },  // 在 login 对象中定义了登录后进入的页面
+                {path: '/home',component:Home, name:'Home', children:[
+                    // path 带 /，则永远以根路径开始请求（不会拼接 /home）
+                    { path: '/main', component: Zhuye },
+                    { path: '/course', component: Course },
+                    { path: '/news', component: News },
+                    { path: '/detail/:id', component: Detail, name: 'Detail' },
+                    { path: '/pins', component: Pins, name: 'Pins', children: [
+                            { path: '', component: Following }, // 点击 沸点 后默认进入  Following 页面
+                            // 使用 children 属性实现子路由时，子路由的 path 若不带 /， 则会拼接 /pins
+                            { path: 'hot', component: Hot, name: 'Hot' },
+                            { path: 'following', component: Following, name: 'Following' },
+                        ]
+                    },
+                ]
+                },
+            ],
+            linkActiveClass: 'myactive',
+        })
+
+        // 导航守卫
+        routerObj.beforeEach((to, from, next) => {
+            if(sessionStorage.getItem('isLogin')){   // 已登录，继续访问
+                next();
+                return;
+            }
+            if(to.name === "Login"){  // 未登录，进入登录页面
+                next();
+                return;
+            }
+            next({name: 'Login'});  // 未登录，始终跳转至登录页面
+        })
+
+        var app = new Vue({
+            el:"#app",
+            data:{
+                name: "李艾儿" 
+            },
+            methods:{},
+            watch:{
+                // 监听路由地址的改变
+                "$route.path":function(newVal, oldVal){
+                    console.log(newVal + "---" + oldVal)
+                }
+            },
+            router:routerObj  // 将路由规则对象注册到 app 实例上，用来监听 URL 地址的变化，展示对应组件
+        })
+    </script>
+</body>
+</html>

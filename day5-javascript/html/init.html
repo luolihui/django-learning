@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>初识js</title>
+    <style>
+        .menus{
+            width: 200px;
+            height: 200px;
+            border: 1px solid greenyellow;
+        }
+        .menus .header{
+            height: 100px;
+        }
+        .menus .item{
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menus">
+        <div class="header">投标</div>
+        <div class="item" onclick="f1()">爱国</div>
+    </div>
+
+    <ul id="city">
+         
+    </ul>
+
+    <script type="text/javascript">
+        var name='李多海';
+        function f1(){
+            // console.log(name); //在控制台查看输出结果
+            alert(name);  //弹窗显示结果
+        }
+        //动态创建列表
+        var cityname=['北京','上海','长沙'];
+        for(var idx in cityname){
+            var text=cityname[idx];
+            var tag=document.createElement('li');
+            tag.innerText=text;
+            var parent=document.getElementById('city');
+            parent.appendChild(tag);
+        }
+
+    </script>
+</body>
+
+</html>

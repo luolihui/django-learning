@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>行内与块级，字体</title>
+    <!--
+    行内标签改变成块级：display:inline-block;
+    水平居中 text-align: center;
+    内边距：padding-left: 20px;
+    外边距：margin-top: 20px;
+    区域居中：margin: 0 auto;
+    -->
+    <style>
+        .c1{
+            display: inline-block;
+            border: 1px solid blue;
+            height: 100px;
+            width: 300px;
+            color: aqua;
+            font-size: 20px;   
+            font-weight: 500;
+            text-align: center;
+        }
+        .item{
+            float: left;
+            width: 280px;
+            height: 170px;
+            border: 1px solid green;
+        }
+        .outer{
+            border: 1px solid rebeccapurple;
+            width: 200px;
+            height: 200px;
+            padding-left: 20px;
+            padding-top: 30px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <p>行内标签设置高度，宽度无效，除非设置display: inline-block，右边空白充足时，会占用右边空白</p>
+    <span class="c1">华南师范</span>
+    <span class="c1">韩式师范</span>
+    <div>
+        <span>左边</span>
+        <span style="float:right">右边</span>
+    </div>
+    
+    <div style="background-color: bisque;">
+        <div class="item"></div>
+        <div class="item"></div>
+        <div style="clear:both"></div>
+    </div>
+    <div style="border:1px solid goldenrod;margin-top: 20px;margin-bottom: 10px;">忘了他，就像忘记一首歌</div>
+
+    <div class="outer">
+        <div style="background-color: aquamarine;">孩子是祖国的未来</div>
+        <div>东风大卡垃圾发电</div>
+    </div>
+
+</body>

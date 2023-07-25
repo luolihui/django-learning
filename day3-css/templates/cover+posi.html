@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>css覆盖</title>
+    # flask中css文件必须放在static文件夹中(可修改)
+    <link rel="stylesheet" href="/static/commons.css">
+    <style>
+        .c1{
+            height: 300px;
+            width: 500px;
+            border: 1px solid red;
+
+            position: relative;
+        }
+        .c1 .c2{
+            height: 59px;
+            width: 59px;
+            background-color: #00FF7F;
+
+            position: absolute;
+            right: 20px;
+            bottom: 10px;
+        }
+        .c3{
+            color:red !important;
+            border: 1px solid blue;
+        }
+        .c4{
+            font-size: 28px;
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="xx">用户注册2</h1>
+    <p>多个样式发生冲突时，在style最后的会覆盖前面所有效果，比如c2中的purple覆盖c1的red,
+        除非加上 !important
+    </p>
+    <div class="c3 c4">中国联通</div>
+    <a href="/select" target="_blank">此处跳至select.html</a>
+
+    
+    <div class="c1">
+        <div class="c2"> </div>
+    </div>
+
+</body>

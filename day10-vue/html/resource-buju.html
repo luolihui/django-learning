@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用 vue-resource 发送数据请求</title>
+    <!--引入 resource 之前必须先引用 Vue（存在依赖）-->
+    <script src="../plugins/vue.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-router/2.7.0/vue-router.min.js"></script>
+    <style>
+        html, body{
+            margin-left: 10px;
+            margin-right: 10px;
+            padding: 0;
+        }
+        .header{
+            background-color: orange;
+            height: 180px;
+        }
+        .container{
+            display: flex;
+            height: 400px;
+        }
+        .left{
+            background-color: lightblue;
+            flex: 2;
+        }
+        .main{
+            background-color: antiquewhite;
+            flex: 8;
+        }
+        h1{
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
+    </style> 
+</head>
+<body>
+    <div id="app">
+        <router-view></router-view>
+        <div class="container">
+            <router-view name="left"></router-view>
+            <router-view name="main"></router-view>
+        </div>
+
+    </div>
+
+    <script>
+        var header = {
+            data: function(){
+                return{
+                    info: null,
+                }
+            },
+            methods: {
+                getinfo() {
+                    this.$http.get('https://www.runoob.com/try/ajax/json_demo.json')
+                    .then(function (resul) {
+                        console.log(resul.data)
+                    })
+                },
+                postinfo() {
+                    this.$http.post('https://www.runoob.com/try/ajax/demo_axios_post.php', {},
+                    { emulateJSON: true })
+                    .then(resu => {
+                            this.info = resu
+                        })
+                },
+                jsonpinfo() { // 网址有误
+                    this.$http.jsonp('https://www.runoob.com/try/ajax/json_demo.json')
+                    .then(res => {
+                        console.log(res.body)
+                    })
+                },
+            },
+            // Component template should contain exactly one root element.
+            template: 
+            `<div  class="header">
+                <h1>header头部区域</h1>
+                <input type="button" value="get请求" @click="getinfo">
+                <input type="button" value="post请求" @click="postinfo">
+                <input type="button" value="jsonp请求" @click="jsonpinfo">
+                <p> {{ info }} </p>
+            </div>`
+        }
+
+        var leftBox = {
+            data: function () {
+                return {
+                    firstname: '',
+                    lastname: '',
+                    middlename: '',
+                }
+            },
+            computed:{
+                // computed 中定义的属性叫计算属性，其本质是方法，但是用的时候不加 ()
+                // 只要计算属性 function 内使用的数据发生了变化，就会重新计算结果
+                // 计算属性的结果会被缓存起来，方便下次直接使用
+                'fullname':function(){
+                    return this.firstname + '--' + this.middlename + '--' + this.lastname
+                }
+            },
+            template: 
+            `<div class="left">
+                <h1>left侧边栏区域</h1>
+                <input type="text" v-model="firstname"> +
+                <input type="text" v-model="middlename"> +
+                <input type="text" v-model="lastname"> =
+                <input type="text" v-model="fullname"> 
+            </div>`
+        }
+
+        var mainBox = {
+            data:function(){
+                return{
+                    firstname: '',
+                    lastname: '',
+                    fullname: ''
+                }
+            },
+            watch: { 
+                // 监听文本框数据变化
+                'firstname': function (newVal, oldVal) {
+                    this.fullname = newVal + '---' + this.lastname
+                },
+                'lastname': function (newVal) {
+                    this.fullname = this.firstname + '---' + newVal
+                }
+            },
+            template: 
+            `<div class="main">
+                <h1>main主体区域</h1>
+                <input type="text" v-model="firstname"> +
+                <input type="text" v-model="lastname"> =
+                <input type="text" v-model="fullname"> 
+            </div>`
+        }
+
+        var rou = new VueRouter({
+            routes: [
+                { path: '/', components: { 'default': header, 'left': leftBox, 'main': mainBox } }
+            ]
+        })
+
+        var vm = new Vue({
+            el:"#app",
+            data:{ },
+            methods:{ },
+            router: rou
+        })
+    </script>
+</body>
+</html>
