@@ -78,17 +78,24 @@
     </script>
 
     <script>
-        // class 
+        // 定义类,实例的属性除非显式定义在自身(this对象)，否则都是定义在原型(class)上 
         class person{
-            constructor(x,y){
+            constructor(x,y,z){
                 this.x = x
                 this.y = y
+                // this.add = this.add.bing(this)
             }
             add(){
                 console.log(this.x + this.y)
             }
         }
         let aa = new person(2,3)
+        aa.add()
+        eq = aa.constructor === person.prototype.constructor  // true
+        pr1 = aa.hasOwnProperty('x') //true
+        pr2 = aa.hasOwnProperty('z') // false
+        pr3 = aa.hasOwnProperty('add') // false 如果在constructor中改变this指向，则是true
+        console.log(eq,pr1,pr2,pr3)
     </script>
 </body>
 
