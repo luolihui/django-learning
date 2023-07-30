@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RS5入门实例</title>
+    <!-- react底册核心库-->
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <!-- react操作DOM的核心库 -->
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- 
+        用于解析ES6语法
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    -->
+</head>
+<body>
+    <!-- react渲染三部曲：
+        1 定义一个存放虚拟DOM的容器
+        2 创建虚拟DOM元素
+        3 把虚拟DOM渲染到页面上
+    -->
+    <div id="root1"></div>
+    <div id="root2"></div>
+    
+    <script>
+        // ES5 方法创建
+        var element = React.createElement('li', {}, 'hello')  // 创建元素
+        ReactDOM.render(element, document.getElementById('root1'))  // 渲染元素
+
+        // 多层嵌套
+        var li1 = React.createElement('li', null, '1111')
+        var li2 = React.createElement('li', {className:'list-li'}, '2222')
+        var uld = React.createElement('ul', {id:'list'}, li1, li2)
+        ReactDOM.render(uld, document.getElementById('root2'))
+    </script>
+</body>
+</html>
