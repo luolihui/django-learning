@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件处理</title>
+    <!-- react底册核心库-->
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <!-- react操作DOM的核心库 -->
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- 用于解析babel  -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="sj1"></div>
+    <script type="text/babel">
+        class Shi extends React.Component{
+            constructor(){
+                super()
+                this.state = {
+                    name: '丽萨',
+                    age: 14,
+                }
+                this.addAge = this.addAge.bind(this)
+                this.cutAge = this.cutAge.bind(this)
+
+            }
+
+            addAge(){
+                this.setState({age:this.state.age + 1})
+            }
+            cutAge(){
+                this.setState({age:this.state.age - 1})
+            }
+
+            render() {
+                return <div>
+                            <h3>有状态组件</h3>
+                            <p>姓名:{this.state.name}</p>
+                            <p>年龄:{this.state.age}</p>
+                            <button onClick={this.addAge}>飞速成长</button>
+                            <button onClick={this.cutAge}>返老还童</button>
+                        </div>
+            }
+        }
+        ReactDOM.render(<Shi/>,document.getElementById('sj1'))
+    </script>
+
+    <div id="sj2"></div>
+    <script type="text/babel">
+        class Jian extends React.Component{
+            state = {
+                name:'爱丽丝',
+                age:32,
+            }
+            addAges(){
+                this.setState({age:this.state.age + 1})
+            }
+            cutAges() {
+                this.setState({ age: this.state.age - 1 })
+            }
+            updateName = () => {
+                this.setState({name:"布鲁斯"})
+            }
+            render(){
+                return <div>
+                            <h3>不使用constructor</h3>
+                            <p>姓名: {this.state.name}</p>
+                            <p>年龄: {this.state.age}</p>
+                            <button onClick={this.addAges.bind(this)}>长大</button>
+                            <button onClick={() => this.cutAges()}>变小</button>
+                            <button onClick={this.updateName}>改名</button>
+                       </div>
+            }
+        }
+        ReactDOM.render(<Jian/>,document.getElementById('sj2'))
+    </script>
+
+    <div id="sj3"></div>
+    <script type="text/babel">
+        // 如果你想渲染一个React组件，用大写字母开始它的名字。
+        function Login(){
+            return <div>
+                        <h2>用户登录</h2>
+                        <div><input type='text'></input></div>
+                        <div><input type='password'></input></div>
+                        <button>登录</button>
+                   </div>
+        }
+        
+        function Register(){
+             return <div>
+                        <h2>用户注册</h2>
+                        <div><input type='text'></input></div>
+                        <div><input type='password'></input></div>
+                        <button>注册</button>
+                    </div>
+        }
+
+        class APP extends React.Component{
+            state = {
+                flag:true,
+            }
+
+            updateState = () => {
+                this.setState({flag: !this.state.flag})
+            }
+
+            render(){
+                const flag = this.state.flag // 适用于状态较少的情况
+                // const {flag} = this.state // 状态较多
+                return <div>
+                            {flag? <Login/> : <Register/>}
+                            <button onClick={this.updateState}>切换</button>
+                       </div>
+            }
+        }
+        ReactDOM.render(<APP/>,document.getElementById('sj3'))
+    </script>
+</body>
+</html>

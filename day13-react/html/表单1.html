@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表单提交,渲染,封装</title>
+    <!-- react底册核心库-->
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <!-- react操作DOM的核心库 -->
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- 用于解析babel  -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="bd1"></div>
+    <script type="text/babel">
+        class Biao extends React.Component{
+            state = {
+                value:'123',
+                data: 'w'
+            }
+            // 双向数据绑定
+            change = (e) =>{
+                this.setState({value: e.target.value})
+            }
+            render(){
+                return <div>
+                            <h3>受限组件</h3>
+                            <input type='text' value={this.state.data} />
+                            <input type='radio' checked />
+                            <input type='checkbox' checked />
+                            <select value='B'>
+                                <option value='A'>A</option>
+                                <option value='B'>B</option>
+                                <option value='C'>C</option>
+                            </select>
+                            <h3>不受限组件</h3>
+                            <input type='text' /><br/>
+                            <input type="text" defaultValue={this.state.value} onChange={this.change} />
+                            <p>{this.state.value}</p>
+                            <label>空值：
+                                <input type='radio' name='eat' />吃饭
+                                <input type='radio' name='eat' />喝酒
+                            </label><br/>
+                            <label>默认值：
+                                <input type='radio' name='sex' defaultChecked/>男
+                                <input type='radio' name='sex' />女
+                            </label><br/>
+                            <label>空值：
+                                <input type='checkbox' />苹果
+                                <input type='checkbox' />香蕉
+                                <input type='checkbox' />橘子
+                                <input type='checkbox' />西瓜
+                            </label><br />
+                            <label>默认值： 
+                                <input type='checkbox' defaultChecked />苹果
+                                <input type='checkbox' defaultChecked />香蕉
+                                <input type='checkbox' />橘子
+                                <input type='checkbox' />西瓜
+                            </label><br />
+                            <label>空值：
+                                <select>
+                                    <option value='A'>A</option>
+                                    <option value='B'>B</option>
+                                    <option value='C'>C</option>
+                                </select>
+                            </label><br/>
+                            <label>多个默认值：
+                                <select multiple={true} defaultValue={['A','D']}>
+                                    <option value='A'>A</option>
+                                    <option value='B'>B</option>
+                                    <option value='C'>C</option>
+                                    <option value='D'>D</option>
+                                </select>
+                            </label><br />
+                       </div>
+            }
+        }
+        ReactDOM.render(<Biao/>, document.getElementById('bd1'))
+    </script>
+
+    <div id="bd2"></div>
+    <script type="text/babel">
+        class Dan extends React.Component{
+            state = {
+                name: '凌云',
+                sex: '1',
+                select: 'B',
+                text: "尽快答复",
+                select2: '',
+                select3: '',
+            }
+            // handleName = (e) => {
+            //     this.setState({ name:e.target.value })
+            // }
+            // handleRadio = (e) => {
+            //     this.setState({ sex: e.target.value })
+            // }
+            // handleSelect = (e) => {
+            //     this.setState({ select: e.target.value })
+            // }
+            // handleSelect2 = (e) => {
+            //     this.setState({ select2: e.target.value })
+            // }
+            // handleSelect3 = (e) => {
+            //     this.setState({ select3: e.target.value })
+            // }
+            // handleText = (e) => {
+            //     this.setState({ text: e.target.value })
+            // }
+            handleChange = (e) => {
+                this.setState({[e.target.name]: e.target.value})
+            }
+            handleSubmit = () => {
+                alert(JSON.stringify(this.state))
+            }
+            render(){
+                let { name, sex, select, text, select2, select3 }= this.state
+                let arr2 = ['D','E', 'F']
+                let arr3 = [{id:1,color:"red"}, {id:2,color:"blue"}, {id:3,color:"green"}]
+                return <div>
+                        <h3>表单提交</h3>
+                        <form>
+                            <label>姓名：<input type='text' name='name' defaultValue={name}
+                                   onChange={this.handleChange} /></label><br/>
+                            <label>性别：
+                                <input type='radio'name='sex' value='1' 
+                                    defaultChecked={sex === '1' ? true : false}
+                                    onChange={this.handleChange} />男
+                                <input type='radio' name='sex' value='2'
+                                    defaultChecked={sex === '2' ? true : false}
+                                    onChange={this.handleChange} />女
+                            </label><br />
+                            <label>选择（固定）：
+                                <select name='select' defaultValue={select} onChange={this.handleChange}>
+                                    <option value='A'>A</option>
+                                    <option value='B'>B</option>
+                                    <option value='C'>C</option>
+                                </select>
+                            </label><br />
+                            <label>选择（普通数组循环）：
+                                <select  name='select2' defaultValue={select2} onChange={this.handleChange}>
+                                    {
+                                        arr2.map((item, index) => 
+                                             <option key={index} value={item}>{item}</option>
+                                        )
+                                    }
+                                </select>
+                            </label><br />
+                            <label>选择（元素为对象的数组循环）：
+                                <select  name='select3' defaultValue={select3} onChange={this.handleChange}>
+                                    {
+                                        arr3.map(item =>
+                                            <option key={item.id} value={item.id}>{item.color}</option>
+                                        )
+                                    }
+                                </select>
+                            </label><br />
+                            <label>备注：
+                                <textarea  name='text' defaultValue={text} onChange={this.handleChange}></textarea>
+                            </label><br/>
+                            <button onClick={this.handleSubmit}>提交</button>
+                        </form>
+                       </div>
+            }
+        }
+        ReactDOM.render(<Dan/>,document.getElementById('bd2'))
+    </script>
+
+    <div id="bd3"></div>
+    <script type="text/babel">
+        class Bd3 extends React.Component{
+            state = {
+                name: '',
+                password: '',
+                address: ''
+            }
+            handleChange = (e) => {
+                let names = e.target.name
+                this.setState({[names]: e.target.value})
+            }
+            handleSubmit = () => {
+                alert(JSON.stringify(this.state))
+            }
+            render(){
+                let {name, password, address} = this.state
+                return <div>
+                            <h3>表单封装</h3>
+                            <form>
+                                <label>姓名：<input type='text' name='name' defaultValue={name} 
+                                        onChange={this.handleChange} /></label><br />
+                                <label>密码：
+                                    <input type='password'name='password' defaultChecked={password}
+                                        onChange={this.handleChange} />
+                                </label><br />
+                                <label>地址：<input type='text' name='address' defaultValue={address}
+                                        onChange={this.handleChange} /></label><br />
+                                <button onClick={this.handleSubmit}>提交</button>
+                            </form>
+                       </div>
+            }
+        }
+        ReactDOM.render(<Bd3/>,document.getElementById("bd3"))
+    </script>
+</body>
+</html>

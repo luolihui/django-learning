@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件</title>
+    <!-- react底册核心库-->
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <!-- react操作DOM的核心库 -->
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- 用于解析babel  -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="zjw"></div>
+    <script type="text/babel">
+        // 函数式组件(无状态组件)不存在state和生命周期函数，可以有props。（更常用）
+        // 因为有状态组件的生命周期函数会影响当前项目的运行，除非确定了要进行数据的增删改查
+        function Hello(props){
+            return <div> 
+                        <h3>中国共产党</h3>
+                        <p>成立时间：{props.time}</p>
+                        <p>地点：{props.place}</p>
+                        <p>人员：{props.people}</p>
+                  </div>
+        }
+        ReactDOM.render(<Hello time='1921年' place='浙江嘉兴南湖小船' people='陈独秀、董必武、李大钊'/>,
+                         document.getElementById('zjw'))
+    </script>
+
+    <div id="zjy"></div>
+    <script type="text/babel">
+        // class组件(有状态组件)使用class定义、extends继承React.Component；
+        // 有state进行数据的存储与管理，还有props和生命周期函数。
+        class You extends React.Component{
+// 子类必须在构造器中调用super()方法，从而得到父类的this对象，否则会报错： 'this' is not allowed before super()
+// 如果需要在构造函数中使用props，则在构造器和super()中添加props参数
+            // constructor(){
+            //     super() 
+            //     this.state = {
+            //         times:'1945年',
+            //         places:'东京湾密苏里号主甲板',
+            //         ren:'昭和天皇、重光葵、冈村宁次',
+            //     }
+            // }
+            state = {  // 开发中倾向的简便写法
+                    times:'1945年8月',
+                    places:'东京湾密苏里号主甲板',
+                    ren:'昭和天皇、重光葵、冈村宁次',
+                }
+            // render是生命周期中基础和底层的方法，一定要用它进行渲染
+            render(){
+                return <div>
+                            <h3>二战结束标志：日本投降</h3>
+                            <p>时间：{this.state.times}</p>
+                            <p>地点：{this.state.places}</p>
+                            <p>任务：{this.state.ren}</p>
+                            <h3>中华人民共和国</h3>
+                            <p>时间：{this.props.times}</p>
+                            <p>地点：{this.props.places}</p>
+                            <p>任务：{this.props.ren}</p>
+                       </div>
+            }
+        }
+        ReactDOM.render(<You times='1949年' places='北京天安门' ren='毛泽东，周恩来，朱德' />,
+                        document.getElementById('zjy'))
+    </script>
+</body>
+</html>
