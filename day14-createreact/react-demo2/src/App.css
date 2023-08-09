@@ -1,0 +1,19 @@
+.header{
+    background-color: blueviolet;
+    text-align: center;
+    font-size: 36px;
+}
+
+.main2 {
+    background-color: blue;
+    text-align: center;
+    font-size: 36px;
+    margin-top: 10px;
+}
+
+.footer {
+    background-color: bisque;
+    text-align: center;
+    font-size: 36px;
+    margin-top: 10px;
+}
