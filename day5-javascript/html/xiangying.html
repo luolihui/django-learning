@@ -7,26 +7,68 @@
 
 <body>
     <input type="text" placeholder="输入内容" id="txtUser" />
-    <input type="button" value="添加" onclick="addcityinfo()">
+    <input type="button" value="添加" onclick="addCityInfo()">
     
     <ul id="city">
     </ul>
 
     <script type="text/javascript">
-        function addcityinfo(){
+
+        function addCityInfo(){
             //获取输入文本标签
             var txtTag=document.getElementById('txtUser');
             //获取输入内容
-            var newstring=txtTag.value;
-            if(newstring.length>0){
+            var newString=txtTag.value;
+            if(newString.length>0){
                 var newTag=document.createElement('li');
-                newTag.innerText=newstring;
+                newTag.innerText= newString;
                 var parentTag=document.getElementById('city');
                 parentTag.appendChild(newTag);
                 txtTag.value='';
             }else{
                 alert('输入不能为空');
             }
+        }
+
+        // 立即执行函数(无参数)
+        (function (){
+            let num = 10
+            console.log(num+'防止变量污染')
+        })();  // 多个立即执行函数必须要用分号隔开
+
+        // 有参数
+        (function (x,y){
+            let num = 20
+            console.log(x+y+num)
+        })(1,2)
+
+        console.log(11 && 22 + '短路与：返回最后一个真值') // 22 
+        console.log('短路或：返回第一个真值' + 11 || 22 ) // 11 
+        console.log(''-1) // -1
+        console.log('acd'-2) // NaN
+        console.log(undefined+1) // NaN
+        console.log(null + 1) // 1
+        console.log(false+2) // 2
+
+        let obj = {
+            faFan:function(x,y){
+                console.log(x+y)
+            },
+            name:'华为mate60',
+            color:'red',
+            price:6999,
+            'publish-time':'2023-9-12'
+        }
+        document.write(obj['publish-time'] + "</br>")
+        document.write(obj.name + "</br>")
+        document.write(obj['color'] + "</br>")
+        obj.faFan(56,23) 
+        for(let i in obj){
+            console.log(obj[i])
+        }
+        // 获取指定范围随机整数 
+        function getRandom(N,M){
+            return Math.floor(N + Math.random()*(M-N+1))
         }
     </script>
 </body>

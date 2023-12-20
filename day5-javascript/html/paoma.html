@@ -3,6 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>跑马灯</title>
+    <style>
+        .msDo{
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .sort{
+            width: 500px;
+            margin-top: 10px;
+            border: 1px solid red;
+        }
+    </style>
 </head>
 
 <body>
@@ -10,7 +21,7 @@
      <span id="txt">欢迎韩国明星韩素喜驾临华南师范大学
      </span>
 
-     <table border="1">
+     <table class="msDo" border='1px'>
         <thead>
             <tr>
                 <th>ID</th>
@@ -23,6 +34,14 @@
         </tbody>
      </table>
 
+     <div class="sort">
+        sort() 方法用于对数组的元素进行排序。
+        排序元素可以是字母或数字，默认按字母升序排列。
+        注意： 当数字是按字母顺序排列时"40"将排在"5"前面，因为“40”中的"4"小于“5”。
+        使用数字排序，必须通过一个函数作为参数来调用。函数指定数字是按照升序还是降序排列。
+        注意： 这种方法会改变原始数组！。
+     </div>
+
     <script type="text/javascript">
         function show(){
             var tag=document.getElementById('txt'); //获取HTMl某标签的内容
@@ -30,21 +49,21 @@
 
             var first=data[0];
             var other=data.substring(1,data.length);
-            var newtext=other+first;
+            var newText=other+first;
 
-            tag.innerText=newtext;
+            tag.innerText=newText;
         } 
         setInterval(show,1000) //js定时器
 
         //动态创建表格
-        var infolist=[
+        var infoList=[
         {id:1,name:'李登辉',age:23},
         {id:2,name:'金凤凰',age:24},
         {id:3,name:'孔圣人',age:2000},
         {id:4,name:'刘青云',age:53}
         ];
-        for(var idx in infolist){
-            var info=infolist[idx];
+        for(var idx in infoList){
+            var info=infoList[idx];
             var tr=document.createElement('tr');
             for(var key in info){
                 var text=info[key];
@@ -52,9 +71,105 @@
                 td.innerText=text;
                 tr.appendChild(td);
             }
-            var bodytag=document.getElementById('body');
-            bodytag.appendChild(tr);
+            var bodyTag=document.getElementById('body');
+            bodyTag.appendChild(tr);
         }
+
+        let arr = ['拉萨','长沙',23,'成都','海城']
+        for (let i = 0; i < arr.length; i++) {
+            console.log(arr[i])
+        }
+
+        console.log(parseInt(234 / 100)) // 2
+        console.log(parseInt(234 / 10 % 10)) // 3
+        console.log(234 % 10) // 4
+        console.log(10 / 3) // 3.333333333335
+
+        // 输入为1 2 3的形式
+        // .map(Number)是遍历数组每一项，转化为数字。
+        // let a = readline().split(' ').map(Number)
+        let b = [1,2,3]
+        console.log(b.join(",")) // 1,2,3
+        console.log(b.join(" ")) // 1 2 3
+        console.log(b.join("")) // 123
+
+        // 长方形重叠
+        let rect1=[0,0,10,10]
+        let rect2=[0,1,8,18]
+        if(rect1[0]>=rect1[2] || rect1[1] >= rect1[3] || rect2[0] >= rect2[2] || rect2[0] >= rect2[2]){
+            console.log(false)
+        }
+        bool = !(rect1[2] <= rect2[0] || rect1[1] >= rect2[3] || rect1[0] >= rect2[2] || rect1[3] <= rect2[1])
+        console.log(bool)
+        
+        // 排序
+        let arr2 = [2, 5, 43, 33, 12, 98, 8]
+        document.write(arr2.sort() + "<br/>") // [12,2,33,43,5,8,98]
+        document.write(arr2.reverse() + "<br/>") // [98,8,5,43,33,2,12]
+        document.write(arr2.sort((a, b) => a - b) + "<br/>") // [2,5,8,12,33,43,98]
+
+        let str = 'become'
+        arr3 = str.split('')
+        arr3.splice(1, 2)
+        document.write( arr3 + "<br/>") // b,o,m,e
+        arr3.splice(2,0,'x')
+        document.write(arr3 + "<br/>") // b,o,x,m,e
+        
+        // 冒泡排序
+        function bubbleSort(arr){
+             for (let i = 0; i < arr.length - 1; i++) {
+                for (let j = 0; j < arr.length - 1 - i; j++) {
+                    if (arr[j] > arr[j + 1]) {
+                        let temp = arr[j]
+                        arr[j] = arr[j + 1]
+                        arr[j + 1] = temp
+                    }
+                }
+            }
+            return arr
+        }
+        let arr4 = [3, 4, 1, 43, 12, 53]
+        arr4 = bubbleSort(arr4)
+        document.write(arr4 + "<br/>")
+
+        // 随机播放顺序
+        let wei = [2, 3, 2, 1, 4, 5]
+        function zhOng(arr = []) {
+            let out = []
+            let len = arr.length 
+            while (out.length < len) {
+                out.push(arr[0])
+                arr.shift()
+                firstElement = arr.shift()
+                arr.push(firstElement)
+            }
+            document.write(out.join(",") + "<br/>")
+        }
+        zhOng(wei)  
+        
+        // 网易
+        function cal(i) {
+            if (i < 0) {
+                return 0
+            } else {
+                return cal(i - 3) + 3
+            }
+        }
+        console.log(cal(4))  // 6
+
+        arr = new Array(2)
+        arr[1] = 2
+        console.log(arr)  // [undefined,2]
+
+        // 在一个函数中，首先填充几个参数，然后再返回一个新的函数的技术，称为函数的柯里化
+        // 函数柯里化的主要作用和特点就是参数复用、提前返回和延迟执行
+        const add = function add(x) {
+            return function (y) {
+                return x - y
+            }
+        }
+        const add1 = add(1)
+        console.log(add1(3)) // -2
     </script>
 
 </body>
