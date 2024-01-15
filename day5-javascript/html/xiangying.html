@@ -70,6 +70,26 @@
         function getRandom(N,M){
             return Math.floor(N + Math.random()*(M-N+1))
         }
+
+        // 判断输入字符串是否符合IPv4地址标准
+        // 需要判断这几种情况:
+        // 1字符串是不是四组；2每组数字在不在0~255之间；3数字有前导0；4有特殊字符；5有空格。
+        function isValidIP(str) {
+            var ipArr = str.split('.');
+            var length = ipArr.length;
+            if (length != 4) { return false; }    //输入不是四组
+            for (var i = 0; i < length; ++i) {
+
+                if (typeof parseInt(ipArr[i]) == "number" && isNaN(parseInt(ipArr[i])) != true) {    //转为number类型并且 判断是否有特殊字符
+                    if (ipArr[i][0] == 0 && ipArr[i].length > 1) { return false; }              //有前导0的情况，注意不要转为Number再判断
+                    if (parseInt(ipArr[i]) < 0 || parseInt(ipArr[i]) > 255) { return false; }            //是否在0-255之间
+                    if (ipArr[i].trim() != ipArr[i]) { return false; }                                   //是否含有空格
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        }
     </script>
 </body>
 
